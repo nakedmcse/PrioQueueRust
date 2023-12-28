@@ -1,39 +1,66 @@
-// Priority Queue 
-use priority_queue::PriorityQueue;
+use std::cmp::Ordering;
+use std::collections::BinaryHeap;
+use std::fmt::Display;
+// Priority Queue
+//use priority_queue::PriorityQueue;
 use std::time::Instant;
 use rand::Rng;
 
+#[derive(Debug, Eq, Ord, Copy, Clone)]
+struct PriorityPair {
+    priority: i64,
+    value: i64,
+}
+
+impl PriorityPair {
+    fn new(value: i64, priority: i64) -> Self {
+        Self {
+            priority,
+            value,
+        }
+    }
+}
+
+impl PartialEq<Self> for PriorityPair {
+    fn eq(&self, other: &Self) -> bool {
+        self.priority == other.priority
+    }
+}
+
+impl PartialOrd<Self> for PriorityPair {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        self.priority.partial_cmp(&other.priority)
+    }
+}
+
 fn main() {
-    let range: u64 = 10000000;
+    let range: i64 = 10_000_000;
     let mut rng = rand::thread_rng();
-    let mut simple_prio: PriorityQueue<(i64,u64), i64> = PriorityQueue::new();
+    let mut simple_prio = BinaryHeap::new();
     let mut test_out = String::new();
 
     // Test dequeue order
-    simple_prio.push((1,1),1);
-    simple_prio.push((2,2),1);
-    simple_prio.push((3,3),1);
-    simple_prio.push((4,4),5);
-    simple_prio.push((5,5),9);
+    simple_prio.push(PriorityPair::new(1, 1));
+    simple_prio.push(PriorityPair::new(2,1));
+    simple_prio.push(PriorityPair::new(3,1));
+    simple_prio.push(PriorityPair::new(4,5));
+    simple_prio.push(PriorityPair::new(5,9));
 
     while !simple_prio.is_empty() {
-        test_out = [test_out, simple_prio.pop().unwrap_or(((0,0),0)).0.0.to_string()].join(" ");
+        test_out = [test_out, simple_prio.pop().unwrap_or(PriorityPair::new(0,0)).value.to_string()].join(" ");
     }
 
     println!("Simple Priority Queue Dequeued: {}",test_out);
     
     // Speed Test Enqueue
     let mut pairs: Vec<(i64, i64)> = Vec::new();
-    let mut n:u64 = 0;
-    while n<range {
-        pairs.push((rng.gen_range(0..10000000),rng.gen_range(1..9)));
-        n += 1;
+    for n in 0..range {
+        pairs.push((rng.gen_range(0..range),rng.gen_range(1..9)));
     }
     let start_enqueue = Instant::now();
     n = 0;
     for pair in pairs {
-        simple_prio.push((pair.0,n),pair.1);
-        n += 1;
+        simple_prio.push(PriorityPair::new(pair.0,pair.1));
     }
     let duration_enqueue = start_enqueue.elapsed();
     println!("Simple Priority Queue Enqueue time: {:?}", duration_enqueue);
