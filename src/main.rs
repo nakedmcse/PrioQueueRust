@@ -58,6 +58,7 @@ fn main() {
         pairs.push((rng.gen_range(0..range),rng.gen_range(1..9)));
     }
     let start_enqueue = Instant::now();
+    n = 0;
     for pair in pairs {
         simple_prio.push(PriorityPair::new(pair.0,pair.1));
     }
