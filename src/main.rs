@@ -1,8 +1,7 @@
-use std::cmp::Ordering;
-use std::collections::BinaryHeap;
-use std::fmt::Display;
 // Priority Queue
 //use priority_queue::PriorityQueue;
+use std::cmp::Ordering;
+use std::collections::BinaryHeap;
 use std::time::Instant;
 use rand::Rng;
 
@@ -40,11 +39,11 @@ fn main() {
     let mut test_out = String::new();
 
     // Test dequeue order
-    simple_prio.push(PriorityPair::new(1, 1));
+    simple_prio.push(PriorityPair::new(1,1));
     simple_prio.push(PriorityPair::new(2,1));
     simple_prio.push(PriorityPair::new(3,1));
-    simple_prio.push(PriorityPair::new(4,5));
-    simple_prio.push(PriorityPair::new(5,9));
+    simple_prio.push(PriorityPair::new(4,9));
+    simple_prio.push(PriorityPair::new(5,5));
 
     while !simple_prio.is_empty() {
         test_out = [test_out, simple_prio.pop().unwrap_or(PriorityPair::new(0,0)).value.to_string()].join(" ");
